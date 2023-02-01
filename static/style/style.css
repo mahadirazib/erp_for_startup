@@ -1,0 +1,257 @@
+
+
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+
+h1, h2, h3, p{
+    margin: 0;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: none;
+}
+
+h1{
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+h2{
+    font-size: 1.5rem;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+h3{
+    font-size: 1.5rem;
+}
+
+h5{
+    font-weight: bold;
+}
+
+label{
+    display: inline-block;
+    margin: 15px 0 5px;
+    margin-bottom: 0;
+}
+
+input[type=text], input[type=number], input[type=email], input[type=password], input[type=url]{
+    width: 100%;
+    padding: 7px;
+    border: 1px solid rgb(194, 197, 200);
+
+}
+
+input[type=file]{
+    font-size: 17px;
+    color: #989898;
+}
+
+textarea{
+    padding: 10px;
+    display: block;
+    width: 100%;
+    height: 200px;
+    border: 1px solid rgb(194, 197, 200);
+}
+
+
+input[type=submit]{
+    display: inline-block;
+    padding: 5px 20px;
+    background-color: black;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+}
+
+
+table, tr, td, th{
+    border:  1px solid black;
+    border-collapse: collapse;
+    padding: 10px;
+}
+
+table{
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 50px;
+}
+
+
+hr{
+    border: 0;
+    border-top: 1px solid black;
+    margin: 10px 0;
+}
+
+
+
+
+.nav-item{
+    margin-left: 10px;
+}
+
+
+
+
+
+
+.hidden{
+    display: none;
+}
+
+
+.makeMiddle{
+    width: 100%;
+    text-align: center;
+}
+
+.selfMiddle{
+    margin: 0 auto;
+    width: 100%;
+}
+
+
+.proPic{
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 10%;
+}
+
+
+
+.formContainer{
+    min-height: 75vh;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    width: 80%;
+}
+
+
+.buttonStyle1{
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    color: rgb(20, 113, 206);
+    font-size: 15px;
+    padding: 0 15px;
+    border: 1px solid;
+    border-radius: 50px;
+}
+
+.buttonStyle1:hover{
+    background-color: rgb(20, 113, 206);
+    text-decoration: none;
+    color: white;
+}
+
+.deleteButton{
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    color: #e93737;
+    font-size: 15px;
+    padding: 0 15px;
+    border: 1px solid;
+    border-radius: 50px;
+}
+
+.deleteButton:hover{
+    color: white;
+    background-color: #e93737;
+    text-decoration: none;
+}
+
+.buttonStyle2{
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    color: rgb(20, 113, 206);
+    padding: 5px 15px;
+    margin: 15px 0;
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+.buttonStyle2:hover{
+    text-decoration: none;
+    background-color: rgb(20, 113, 206);
+    color: white;
+}
+
+
+.buttonStyle3{
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    color: #787878;
+    font-size: 15px;
+    padding: 0 15px;
+    margin: 10px;
+    border: 1px solid;
+    border-radius: 50px;
+}
+
+.buttonStyle2:hover{
+    text-decoration: none;
+    background-color: rgb(20, 113, 206);
+    color: white;
+}
+
+
+@media (min-width: 300px) {
+    table, tr, td, th{
+        border:  1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+        font-size: small;
+    }
+    
+}
+
+
+
+
+
+@media (min-width: 600px) {
+    table, tr, td, th{
+        border:  1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+        font-size: medium;
+    }
+    
+}
+
+
+
+
+
+::-webkit-scrollbar {
+    width: 15px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgb(190, 206, 213); 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background-image: linear-gradient(180deg, #73d0ee, #6660ab);
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
