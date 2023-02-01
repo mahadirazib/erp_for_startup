@@ -22,6 +22,11 @@ def index(request):
 
 
 
+def notFound(request, exception):
+    dict = {'message': 'Page Not Found'}
+    return render(request, 'showMessage.html', context=dict)
+
+
 
 @login_required
 def userRegistration(request):

@@ -5,6 +5,7 @@ from django.urls import path, include
 from userAuth import views
 
 from django.conf import settings
+from django.conf.urls import handler404
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns, static
 
 
@@ -21,3 +22,8 @@ urlpatterns = [
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+handler404 = 'userAuth.views.notFound'
+
+
