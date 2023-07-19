@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block nav_block %} {% if
+finaceController %} {% endif %} {% endblock %} {% block body_block %} {% if
+user.is_authenticated %}
+
+<style>
+  td {
+    min-width: 85px;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="password"],
+  input[type="url"] {
+    border: 0px;
+    border-bottom: 1px solid black;
+  }
+
+  input[type="text"]:active,
+  input[type="number"]:active,
+  input[type="email"]:active,
+  input[type="password"]:active,
+  input[type="url"]:active {
+    border-bottom: 2px solid black;
+    outline: 0px;
+  }
+
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus,
+  input[type="url"]:focus {
+    border-bottom: 2px solid black;
+    outline: 0px solid black;
+  }
+
+  input[type="date"] {
+    border: 0px solid white;
+    border-bottom: 1px solid black;
+  }
+
+  input[type="date"]:focus {
+    outline: 0px;
+    border-bottom: 2px solid black;
+  }
+
+  input[type="date"]:active {
+    outline: 0px;
+    border-bottom: 2px solid black;
+  }
+
+  select {
+    border: #ffffff;
+    border-bottom: 0px solid black;
+  }
+  select:focus {
+    border: #ffffff;
+    outline: 0;
+    border-bottom: 2px solid black;
+  }
+  select:active {
+    border: #ffffff;
+    border-bottom: 2px solid black;
+  }
+
+  .leftMargine {
+    margin-left: 20px;
+  }
+
+  .wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    min-height: 80vh;
+  }
+
+  .spendAccount {
+    display: none;
+    margin-bottom: 40px;
+  }
+
+  .recivedAccount {
+    margin-bottom: 40px;
+  }
+
+  #filterByDate,
+  #filterByName,
+  #filterByBoth {
+    display: none;
+  }
+</style>
+
+<div class="wrapper container">
+  <div class="row mt-3">
+    <div class="col-lg-8 col-sm-12 g">
+      <div class="text-left mt-3">
+        <button class="btn btn-outline-info mr-2 mt-2" id="applyFilterByDate">
+          Filter by Date
+        </button>
+        <button class="btn btn-outline-info mr-2 mt-2" id="applyFilterByName">
+          Filter by Name
+        </button>
+        <button class="btn btn-outline-info mr-2 mt-2" id="applyFilterByBoth">
+          Filter by Both
+        </button>
+        <a
+          class="btn btn-outline-info mr-2 mt-2"
+          href="{% url 'finance:accounts' %}"
+          id="resetFilter"
+          >Reset Filter</a
+        >
+      </div>
+    </div>
+
+    <div class="col-lg-4 mt-3">
+      <a
+        href="{% url 'finance:entity_register' %}"
+        class="btn btn-primary mr-2"
+      >
+        Add New Entity
+      </a>
+
+      <a href="{% url 'finance:see_entity_to_edit' %}" class="btn btn-primary">
+        Edit Entity
+      </a>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div id="filterByName">
+      <form action="{% url 'finance:accounts' %}" method="GET">
+        <label for="name">Name: </label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          style="display: inline-block; width: auto"
+        />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+
+    <div id="filterByDate">
+      <form action="" method="GET">
+        <label for="startDate">Start Date: </label>
+        <input type="date" name="startDate" id="startDate" />
+        <label for="endDate">End Date: </label>
+        <input type="date" name="endDate" id="endDate" />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+
+    <div id="filterByBoth">
+      <form action="" method="GET">
+        <label for="startDate">Start Date: </label>
+        <input type="date" name="startDate" id="startDate" />
+        <label for="endDate">End Date: </label>
+        <input type="date" name="endDate" id="endDate" />
+        <label for="name">Name: </label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          style="display: inline-block; width: auto"
+        />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  </div>
+
+  <h1 style="margin: 40px 0 10px">Current Balance: {{ currentBalance }}</h1>
+  <button class="btn btn-success" id="changeVisibility">Spend Money</button>
+
+  <div class="recivedAccount" style="width: 100%; overflow-x: scroll">
+    <h2>Recived Account:</h2>
+
+    <form action="{% url 'finance:accounts' %}" method="POST" id="recivedForm">
+      <table style="margin-bottom: 0">
+        <tr>
+          <th>Date</th>
+          <th>Entity</th>
+          <th>Amount</th>
+          <th>Purpose</th>
+          <th>Medium</th>
+          <th>Action</th>
+        </tr>
+
+        <tr>
+          <td colspan="2"><b> Total </b></td>
+          <td><b> {{ recivedAmount }} </b></td>
+          <td colspan="3">If a user does not exist then create one.</td>
+        </tr>
+
+        <tr>
+          <td>
+            <input type="date" name="date" required value="{% now 'Y-m-d' %}" />
+          </td>
+          <td>
+            <select name="user" required>
+              {% for client in clients %}
+              <option value="{{ client.id }}">
+                {{ client.name }} ({{ client.companyName }})
+              </option>
+              {% endfor %}
+            </select>
+          </td>
+          <td><input type="number" name="amount" required /></td>
+          <td><input type="text" name="purpose" required /></td>
+          <td><input type="text" name="medium" required /></td>
+
+          <td>
+            {% csrf_token %}
+            <input type="submit" value="add" style="margin: 0" />
+          </td>
+        </tr>
+
+        {% for entry in recivedEntries %}
+        <tr>
+          <td>{{ entry.date }}</td>
+          <td>
+            {{ entry.recivedFrom.name }} {% if entry.recivedFrom.companyName %}
+            ( {{ entry.recivedFrom.companyName }} ) {% endif %}
+          </td>
+          <td>{{ entry.amount }}</td>
+          <td>{{ entry.purpose }}</td>
+          <td>{{ entry.medium }}</td>
+          <td>
+            <span class="editEntry" style="border: 0; margin: 0 10px 0 10px">
+              <a href="{% url 'finance:edit_recived_entry' id=entry.id %}">
+                <img
+                  src="{% static 'images/icons/edit.png' %}"
+                  alt="edit"
+                  width="15px"
+                />
+              </a>
+            </span>
+            <span class="deleteEntry" style="border: 0; margin-right: 10px">
+              <a
+                href="{% url 'finance:delete_recived_entry' id=entry.id %}"
+                onclick="return confirm('Are you sure?')"
+              >
+                <img
+                  src="{% static 'images/icons/delete.png' %}"
+                  alt="delete"
+                  width="15px"
+                />
+              </a>
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </form>
+  </div>
+
+  <div class="spendAccount" style="width: 100%; overflow-x: scroll">
+    <h2>Spend Account:</h2>
+
+    <form action="{% url 'finance:accounts_spend_money' %}" method="POST">
+      <table style="margin-bottom: 0">
+        <tr>
+          <th>Date</th>
+          <th>Entity</th>
+          <th>Amount</th>
+          <th>Purpose</th>
+          <th>Medium</th>
+          <th>Action</th>
+        </tr>
+
+        <tr>
+          <td colspan="2"><b> Total </b></td>
+          <td><b> {{ spendAmount }} </b></td>
+          <td colspan="3">If a user does not exist then create one.</td>
+        </tr>
+
+        <tr>
+          <td>
+            <input type="date" name="date" required value="{% now 'Y-m-d' %}" />
+          </td>
+          <td>
+            <select name="user" required>
+              {% for client in clients %}
+              <option value="{{ client.id }}">
+                {{ client.name }} ({{ client.companyName }})
+              </option>
+              {% endfor %}
+            </select>
+          </td>
+          <td><input type="number" name="amount" required /></td>
+          <td><input type="text" name="purpose" required /></td>
+          <td><input type="text" name="medium" required /></td>
+          <td>
+            {% csrf_token %}
+            <input type="submit" value="add" style="margin: 0" />
+          </td>
+        </tr>
+
+        {% for entry in spendEntries %}
+        <tr>
+          <td>{{ entry.date }}</td>
+          <td>
+            {{ entry.spendOn.name }} {% if entry.spendOn.companyName %} ( {{
+            entry.spendOn.companyName }} ) {% endif %}
+          </td>
+          <td>{{ entry.amount }}</td>
+          <td>{{ entry.purpose }}</td>
+          <td>{{ entry.medium }}</td>
+          <td>
+            <span class="editEntry" style="border: 0; margin: 0 10px 0 10px">
+              <a href="{% url 'finance:edit_spend_entry' id=entry.id %}">
+                <img
+                  src="{% static 'images/icons/edit.png' %}"
+                  alt="edit"
+                  width="15px"
+                />
+              </a>
+            </span>
+            <span class="deleteEntry" style="border: 0; margin-right: 10px">
+              <a
+                href="{% url 'finance:delete_spend_entry' id=entry.id %}"
+                onclick="return confirm('Are you sure?')"
+              >
+                <img
+                  src="{% static 'images/icons/delete.png' %}"
+                  alt="delete"
+                  width="15px"
+                />
+              </a>
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </form>
+  </div>
+
+  <script src="{% static 'js/showRecivedAndSpend.js' %}"></script>
+</div>
+
+{% endif %} {% endblock %}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block head_block %}
+
+<link rel="stylesheet" href="{% static 'style/multi-select-tag.css' %}" />
+
+<script src="{% static 'js/multi-select-tag.js' %}"></script>
+
+{% endblock %} {% block body_block %}
+
+<div class="formContainer container" style="margin-top: 30px">
+  <div class="row justify-content-center">
+    {% if check %}
+
+    <h1 class="col-lg-8 col-md-12 col-sm-12">Create Notice:</h1>
+
+    <form method="POST" class="col-lg-8 col-md-12 col-sm-12">
+      {% for noticeInp in createNotice %}
+
+      <div style="width: 100%">
+        <label for="{{ noticeInp.auto_id }}">{{ noticeInp.label }}</label>
+
+        {{noticeInp}}
+      </div>
+
+      {% endfor %} {% csrf_token %}
+
+      <div class="makeMiddle row justify-content-center col-sm-12">
+        <a
+          href="{% url 'dashboard:dashboard' %}"
+          class="btn btn-outline-danger mt-4 mb-3 col-lg-4 col-sm-12"
+          >Cancel</a
+        >
+
+        <div class="col-lg-1 col-sm-12"></div>
+
+        <input
+          type="submit"
+          value="{{ btnText }}"
+          class="mt-4 mb-3 col-lg-4 col-sm-12"
+        />
+      </div>
+    </form>
+
+    <script>
+      new MultiSelectTag("id_user");
+    </script>
+
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

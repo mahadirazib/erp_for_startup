@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block nav_block %} {% endblock %}
+{% block body_block %} {% if user.is_authenticated %}
+
+<style>
+  .wrapper {
+    min-height: 80vh;
+    margin-top: 30px;
+    margin-bottom: 40px;
+  }
+</style>
+
+<div class="container wrapper">
+  {% if dealController %}
+  <div style="width: 100%">
+    <a
+      href="{% url 'deals:register_new_deal' %}"
+      class="btn btn-primary"
+      style="float: right"
+      >Add New Deals</a
+    >
+
+    {% if not oldDeals %}
+    <a
+      href="{% url 'deals:old_deals' %}"
+      class="btn btn-info"
+      style="float: right; margin-right: 20px"
+      >Old Deals</a
+    >
+    {% endif %} {% if oldDeals %}
+    <a
+      href="{% url 'deals:deals' %}"
+      class="btn btn-info"
+      style="float: right; margin-right: 20px"
+      >Current Deals</a
+    >
+    {% endif %}
+  </div>
+  {% endif %} {% if not oldDeals %}
+  <h1>Current Deals:</h1>
+  {% else %}
+  <h1>Old Deals:</h1>
+  {% endif %}
+
+  <div
+    style="
+      width: 40%;
+      height: 2px;
+      background-color: rgb(0, 0, 0);
+      margin: 0 0 30px;
+    "
+  ></div>
+
+  {% for deal in allDeals %}
+
+  <div class="deals">
+    <h2 style="margin-bottom: 0">{{ deal.dealTitle }}</h2>
+    <p style="margin-bottom: 10px">
+      Deal with {{ deal.dealWith }} and ends in {{ deal.dealEnds }}
+    </p>
+
+    {% if dealController and not oldDeals %}
+    <div style="width: 100%">
+      <a
+        href="{% url 'deals:edit_deals' id=deal.id %}"
+        class="buttonStyle1"
+        style="float: right"
+        >Edit</a
+      >
+      <a
+        href="{% url 'deals:terminate_or_end_deals' id=deal.id endOrTerminate='Terminated' %}"
+        class="deleteButton"
+        style="float: right"
+        onclick="return confirm('Are you sure to Tarminate the deal? You can to edit or delete after termination.')"
+        >Terminate</a
+      >
+      <a
+        href="{% url 'deals:terminate_or_end_deals' id=deal.id endOrTerminate='Completed' %}"
+        class="buttonStyle1"
+        style="float: right"
+        onclick="return confirm('Are you sure to complete the deal? You can to edit or delete after Completion.')"
+        >Complete</a
+      >
+    </div>
+    {% endif %} {% if not oldDeals %}
+    <h3>
+      We will
+      <span style="color: red">
+        {{ deal.giveOrReceive }} {{ deal.dealAmount }}$
+      </span>
+      in this deal.
+    </h3>
+    {% else %}
+    <h3>
+      We was supposed to
+      <span> {{ deal.giveOrReceive }} {{ deal.dealAmount }}$ </span>
+      in this deal.
+    </h3>
+    {% endif %}
+
+    <p>{{ deal.dealDescription }}</p>
+
+    {% if oldDeals %} {% if deal.completeOrTerminated == 'Terminated' %}
+    <h2 style="color: rgb(246, 44, 44)">{{ deal.completeOrTerminated }}</h2>
+    {% elif deal.completeOrTerminated == 'Completed' %}
+    <h2 style="color: rgb(32, 103, 234)">
+      Successfully {{ deal.completeOrTerminated }}
+    </h2>
+    {% else %}
+    <h2>{{ deal.completeOrTerminated }}</h2>
+    {% endif %} {% endif %}
+  </div>
+
+  <hr style="margin-top: 30px; margin-bottom: 30px" />
+
+  {% endfor %}
+</div>
+
+{% endif %} {% endblock %}

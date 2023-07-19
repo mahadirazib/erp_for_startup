@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block nav_block %} {% if
+finaceController %} {% endif %} {% endblock %} {% block body_block %} {% if
+user.is_authenticated %}
+
+<style>
+  .leftMargine {
+    margin-left: 20px;
+  }
+
+  .wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    min-height: 80vh;
+  }
+
+  .left,
+  .right {
+    margin: 20px;
+  }
+</style>
+
+<div class="wrapper container">
+  <div style="margin-top: 30px">
+    <a
+      href="{% url 'finance:entity_register' %}"
+      class="btn btn-primary leftMargine"
+      style="float: right"
+      >Add New Entity</a
+    >
+
+    <a
+      href="{% url 'finance:see_entity_to_edit' %}"
+      class="btn btn-primary leftMargine"
+      style="float: right"
+      >Edit Entity</a
+    >
+
+    <a
+      href="{% url 'finance:accounts' %}"
+      class="btn btn-success"
+      style="float: left"
+      >Recived Money</a
+    >
+    <br />
+  </div>
+
+  <div class="recivedAccount">
+    <h2 style="margin: 20px 0">Spend Money: {{ totalAmount }}</h2>
+
+    <form action="{% url 'finance:accounts_spend_money' %}" method="POST">
+      <table style="margin-bottom: 0">
+        <tr>
+          <th>Date</th>
+          <th>Entity</th>
+          <th>Amount</th>
+          <th>Purpose</th>
+          <th>Medium</th>
+        </tr>
+
+        <tr>
+          <td colspan="2"><b> Total </b></td>
+          <td><b> {{ totalAmount }} </b></td>
+          <td colspan="2">If a user does not exist then create one.</td>
+        </tr>
+
+        {% for entry in entries %}
+        <tr>
+          <td>{{ entry.date }}</td>
+          <td>
+            {{ entry.recivedFrom.name }} {% if entry.recivedFrom.companyName %}
+            ( {{ entry.recivedFrom.companyName }} ) {% endif %}
+          </td>
+          <td>{{ entry.amount }}</td>
+          <td>{{ entry.purpose }}</td>
+          <td>{{ entry.medium }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td><input type="date" name="date" /></td>
+          <td>
+            <select name="user">
+              {% for client in clients %}
+              <option value="{{ client.id }}">
+                {{ client.name }} ({{ client.companyName }})
+              </option>
+              {% endfor %}
+            </select>
+          </td>
+          <td><input type="number" name="amount" /></td>
+          <td><input type="text" name="purpose" /></td>
+          <td><input type="text" name="medium" /></td>
+
+          {% csrf_token %}
+        </tr>
+      </table>
+
+      <div class="makeMiddle">
+        <input type="submit" value="Add" />
+      </div>
+    </form>
+  </div>
+
+  <div class="spendAccount">
+    <h2 style="margin: 20px 0">Spend Money: {{ totalAmount }}</h2>
+
+    <form action="{% url 'finance:accounts_spend_money' %}" method="POST">
+      <table style="margin-bottom: 0">
+        <tr>
+          <th>Date</th>
+          <th>Entity</th>
+          <th>Amount</th>
+          <th>Purpose</th>
+          <th>Medium</th>
+        </tr>
+
+        <tr>
+          <td colspan="2"><b> Total </b></td>
+          <td><b> {{ totalAmount }} </b></td>
+          <td colspan="2">If a user does not exist then create one.</td>
+        </tr>
+
+        {% for entry in entries %}
+        <tr>
+          <td>{{ entry.date }}</td>
+          <td>
+            {{ entry.recivedFrom.name }} {% if entry.recivedFrom.companyName %}
+            ( {{ entry.recivedFrom.companyName }} ) {% endif %}
+          </td>
+          <td>{{ entry.amount }}</td>
+          <td>{{ entry.purpose }}</td>
+          <td>{{ entry.medium }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td><input type="date" name="date" /></td>
+          <td>
+            <select name="user">
+              {% for client in clients %}
+              <option value="{{ client.id }}">
+                {{ client.name }} ({{ client.companyName }})
+              </option>
+              {% endfor %}
+            </select>
+          </td>
+          <td><input type="number" name="amount" /></td>
+          <td><input type="text" name="purpose" /></td>
+          <td><input type="text" name="medium" /></td>
+
+          {% csrf_token %}
+        </tr>
+      </table>
+
+      <div class="makeMiddle">
+        <input type="submit" value="Add" />
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endif %} {% endblock %}

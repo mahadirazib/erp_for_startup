@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block nav_block %}
+{% if finaceController %}
+
+
+
+{% endif %}
+{% endblock %}
+
+{% block body_block %}
+{% if user.is_authenticated %}
+
+
+
+<style>
+
+    .leftMargine{
+        margin-left: 20px;
+    }
+
+    .wrapper{
+        margin-top: 20px;
+        margin-bottom: 20px;
+        min-height: 80vh;
+    }
+
+    .spendAccount{
+        display: none;
+        margin-bottom: 40px;
+    }
+
+    .recivedAccount{
+        margin-bottom: 40px;
+    }
+
+    #filterByDate{
+        display: none;
+    }
+
+    #filterByName{
+        display: none;
+    }
+
+</style>
+
+<div class="wrapper container">
+
+
+    <div style="margin-top: 30px;">
+
+        <a href="{% url 'finance:accounts' %}" class="btn btn-primary" id="back" style="float: left;"> ⬅ Back</a>
+        <br>
+
+    </div>
+
+    {% if spend %}
+        <h1 style="margin: 40px 0 10px;">Edit Spend Entry:</h1>
+    {% else %}
+        <h1 style="margin: 40px 0 10px;">Edit Recived Entry:</h1>
+    {% endif %}
+    
+    <div class="formContainer">
+
+    {% if spend %}
+        <form action="{% url 'finance:edit_spend_entry' id=entry.id %}" method="POST" id="edit">
+    {% else %}
+        <form action="{% url 'finance:edit_recived_entry' id=entry.id %}" method="POST" id="edit">
+    {% endif %}
+
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required value="{{ entry.date|date:'Y-m-d' }}">
+            <br>
+
+            {% if spend %}
+                <label for="user">Spend On: </label>
+            {% else %}
+                <label for="user">Recived From: </label>
+            {% endif %}
+
+            <select name="user" id="user" required>
+                {% for client in clients %}
+                {% if spend %}
+                    {% if client.id == selectedClient %}
+                        <option value="{{ client.id }}" selected> {{ client.name }} ({{ client.companyName }}) </option>
+                    {% else %}
+                        <option value="{{ client.id }}"> {{ client.name }} ({{ client.companyName }}) </option>
+                    {% endif %}
+                {% else %}
+                    {% if client.id == selectedClient %}
+                        <option value="{{ client.id }}" selected> {{ client.name }} ({{ client.companyName }}) </option>
+                    {% else %}
+                        <option value="{{ client.id }}"> {{ client.name }} ({{ client.companyName }}) </option>
+                    {% endif %}
+
+                {% endif %}
+                {% endfor %}
+            </select>
+            <br>
+
+            <label for="amount">Amount: </label>
+            <input type="number" id="amount" name="amount" value="{{ entry.amount }}" required>
+            <br>
+
+            {% if spend %}
+                <label for="purpose">Purpose for Spending: </label>
+            {% else %}
+                <label for="purpose">Purpose for Reciving: </label>
+            {% endif %}
+            <input type="text" id="purpose" name="purpose" value=" {{ entry.purpose }} " required>
+            <br>
+
+            <label for="medium">Medium: </label>
+            <input type="text" id="medium" name="medium" value=" {{ entry.medium }} " required> 
+
+            
+            {% csrf_token %}
+
+            <div class="makeMiddle" style="margin: 20px 0;">
+                <input type="submit" value="edit" style="margin: 0;">
+            </div>
+
+                    
+
+        </form>
+        
+    </div>
+    
+
+
+    
+</div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block head_block %}
+
+<link rel="stylesheet" href="{% static 'style/multi-select-tag.css' %}" />
+<script src="{% static 'js/multi-select-tag.js' %}"></script>
+
+{% endblock %} {% block body_block %}
+
+<div class="container" style="margin-top: 30px">
+  {% if check %}
+
+  <h1>Register New Deal:</h1>
+
+  <h2>{{ message }}</h2>
+
+  <div class="formContainer">
+    <form method="POST">
+      {% for inp in dealRegisterForm %}
+
+      <div>
+        <label for="{{ inp.auto_id }}"> {{ inp.label }}: </label>
+        {{ inp }}
+      </div>
+
+      {% endfor %} {% csrf_token %}
+
+      <div class="makeMiddle">
+        <a href="{% url 'deals:deals' %}" class="btn btn-outline-danger"
+          >Cancel</a
+        >
+        <input type="submit" value="{{ btnText }}" style="margin: 20px" />
+      </div>
+    </form>
+  </div>
+
+  <script>
+    new MultiSelectTag("id_whoCanSee");
+  </script>
+
+  {% endif %}
+</div>
+
+{% endblock %}

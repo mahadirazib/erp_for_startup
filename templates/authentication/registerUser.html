@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% block body_block %}
+
+<style>
+  .formContainer {
+    min-height: 72.1vh;
+    width: 70%;
+  }
+</style>
+
+<div class="container" style="margin-top: 30px">
+  <div class="makeMiddle mt-4">
+    <a
+      href="{% url 'dashboard:seeAllEmployee' %}"
+      class="btn btn-outline-primary"
+    >
+      ⬅ Back</a
+    >
+  </div>
+
+  {% if showMessage %}
+
+  <div class="makeMiddle">
+    <h1 style="margin-top: 30px">{{ message }}</h1>
+  </div>
+
+  {% else %}
+
+  <div class="formContainer">
+    <form method="POST" enctype="multipart/form-data">
+      {{ userform.as_p }} {{ userform2.as_p }} {% csrf_token %}
+
+      <div class="makeMiddle mt-4 mb-4">
+        <input type="submit" value="register" />
+      </div>
+    </form>
+  </div>
+
+  {% endif %}
+</div>
+
+{% endblock %}

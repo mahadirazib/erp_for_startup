@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block nav_block %} {% if
+showAddEmployees %}
+
+<li class="nav-item">
+  <a
+    href="{% url 'userAuth:userRegistation' %}"
+    class="nav-link"
+    style="margin-left: 20px"
+    >Add employees</a
+  >
+</li>
+
+{% endif %} {% endblock %} {% block body_block %}
+
+<style>
+  input[type="submit"] {
+    background-color: white;
+    color: #f02e2e;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #f02e2e;
+    color: white;
+  }
+
+  .message {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .mostOuterDiv {
+    min-height: 75vh;
+  }
+</style>
+
+<div class="selfMiddle container mostOuterDiv" style="margin-top: 30px">
+  {% if user.is_authenticated %} {% if showMessage %}
+
+  <h1 class="message">{{ message }}</h1>
+
+  {% else %}
+
+  <div class="makeMiddle">
+    <img
+      src="/media/{{ userMoreInfo.proPic }}"
+      alt="Profile Pic"
+      class="proPic"
+    />
+
+    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+
+    <p>username: ( {{ user.username }} )</p>
+
+    <p>Working as: {{ userMoreInfo.role }}</p>
+
+    <p>{{ user.email }}</p>
+
+    <a href="tel:{{ userMoreInfo.phone }}"> {{ userMoreInfo.phone }} </a>
+
+    <form
+      method="POST"
+      action="{% url 'userAuth:employee_delete' id=user.id %}"
+    >
+      {% csrf_token %}
+      <input
+        type="submit"
+        value="Delete"
+        name="confirm"
+        class="btn btn-danger"
+      />
+    </form>
+  </div>
+
+  {% endif %} {% endif %}
+</div>
+
+{% endblock %}

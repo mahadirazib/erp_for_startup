@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block nav_block %} {% endblock %}
+{% block body_block %}
+
+<style>
+  .wrapper {
+    min-height: 75vh;
+  }
+
+  .message {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .pic {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .sideName {
+    display: inline-block;
+  }
+
+  tr:last-of-type {
+    display: none;
+  }
+</style>
+
+<div class="selfMiddle container wrapper" style="margin-top: 30px">
+  {% if user.is_authenticated %}
+
+  <div class="row">
+    <div class="col-lg-9 col-sm-12">
+      <h1 class="message">Member List:</h1>
+      <div
+        style="
+          width: 40%;
+          height: 2px;
+          background-color: rgb(0, 0, 0);
+          margin: 0 0 30px;
+        "
+      ></div>
+    </div>
+
+    {% if employeeController %}
+    <div class="col-lg-3">
+      <a href="{% url 'userAuth:userRegistation' %}" class="btn btn-primary"
+        >Add New Employee</a
+      >
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    {% for user in userMoreInfo %}
+
+    <div class="col-lg-1 col-sm-2">
+      <img src="/media/{{ user.proPic }}" alt="" class="pic" />
+    </div>
+
+    <div class="col-lg-5 col-sm-10">
+      <div>
+        <h3 class="sideName">
+          {{ user.user.first_name }} {{ user.user.last_name }}
+        </h3>
+
+        {% if user.role == '1' %} ( Chief ) {% elif user.role == '2' %} (
+        Moderator ) {% elif user.role == '3' %} ( Human Resource ) {% elif
+        user.role == '4' %} ( Finance ) {% else %} ( Office Employee ) {% endif
+        %}
+      </div>
+
+      <div class="">
+        <div class="mr-1" style="display: inline">Contact:</div>
+
+        <wbr />
+
+        <div class="mr-4" style="display: inline">
+          <a href="mailto:{{ user.user.email }}"> {{ user.user.email }} </a>
+        </div>
+
+        <wbr />
+
+        <div class="" style="display: inline">
+          <a href="tel:{{ user.phone }}"> {{ user.phone }} </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-12 justify-content-center">
+      {% if employeeController %}
+      <a
+        href="{% url 'dashboard:edit_profile' id=user.user.id  %}"
+        class="buttonStyle1 mt-4 mb-4 mr-4"
+      >
+        edit
+      </a>
+      {% endif %} {% if fullEmployeeControler %}
+      <a
+        href="{% url 'userAuth:employee_delete' id=user.user.id  %}"
+        class="deleteButton mt-4 mb-4"
+        onclick="return confirm('Are you sure?')"
+      >
+        delete
+      </a>
+      {% endif %}
+    </div>
+
+    <div class="col-12 mt-4 mb-4 justify-content-center">
+      <!-- <hr style="width: 70%;"> -->
+    </div>
+
+    {% endfor %}
+  </div>
+
+  {% endif %}
+</div>
+
+{% endblock %}

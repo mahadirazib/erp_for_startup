@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block nav_block %} {% endblock %}
+{% block body_block %} {% if user.is_authenticated %}
+
+<style>
+  .wrapper {
+    min-height: 80vh;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .updateButton {
+    color: rgb(20, 113, 206);
+  }
+
+  .updateButton:hover {
+    color: white;
+  }
+</style>
+
+<div class="container wrapper">
+  <a href="{% url 'finance:see_salaries_in_details' %}" class="btn btn-primary"
+    >see in details</a
+  >
+
+  <h1 style="margin: 20px 0">Employee Salary list</h1>
+
+  <div style="width: 100%; overflow-x: scroll">
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Works as</th>
+        <th>Salary</th>
+        <th>Action</th>
+      </tr>
+
+      {% for user in salaryAndUser %} {% if user.userinfo__role %}
+
+      <tr>
+        <td>{{ user.first_name }} {{ user.last_name }}</td>
+        <td>
+          {% if user.userinfo__role == '1' %} Chief {% elif user.userinfo__role
+          == '2' %} Moderator {% elif user.userinfo__role == '3' %} Human
+          Resource {% elif user.userinfo__role == '4' %} Accountant {% else %}
+          Office Employee {% endif %}
+        </td>
+        <td style="width: 300px">
+          <form action="{% url 'finance:update_salary' %}" method="POST">
+            <span class="updateSalary"> {{ user.salary__salary }} </span>
+            <input type="hidden" name="id" value="{{ user.id }}" />
+            <input
+              type="hidden"
+              name="salaryid"
+              value="{{ user.salary__id }}"
+            />
+            {% csrf_token %}
+            <input type="submit" value="submit" style="display: none" />
+          </form>
+        </td>
+        <td>
+          <span class="updateButton buttonStyle1">edit</span>
+        </td>
+      </tr>
+
+      {% endif %} {% endfor %}
+    </table>
+  </div>
+
+  {% endif %}
+</div>
+
+<script src="{% static 'js/editSalary.js' %}"></script>
+{% endblock %}

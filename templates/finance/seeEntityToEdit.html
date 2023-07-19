@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block nav_block %} {% if
+finaceController %} {% endif %} {% endblock %} {% block body_block %} {% if
+user.is_authenticated %}
+
+<style>
+  .wrapper {
+    margin: 0 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    min-height: 80vh;
+  }
+</style>
+
+<div class="wrapper">
+  <h1 style="margin: 20px 0">Entity List:</h1>
+
+  <div style="width: 100%; overflow-x: scroll; margin-bottom: 20px">
+    <table style="margin-bottom: 0">
+      <tr>
+        <th>Name</th>
+        <th>Client Status</th>
+        <th>Phone Number</th>
+        <th>Email</th>
+        <th>Occupation</th>
+        <th>Company</th>
+        <th>Select</th>
+      </tr>
+
+      {% for entry in entryList %}
+
+      <tr>
+        <td>{{ entry.name }}</td>
+        <td>{% if entry.isClient %} Yes {% else %} No {% endif %}</td>
+        <td>{{ entry.phone }}</td>
+        <td>{{ entry.email }}</td>
+        <td>{{ entry.occupation }}</td>
+        <td>{{ entry.companyName }}</td>
+        <td>
+          <a
+            href="{% url 'finance:entity_edit' id=entry.id %}"
+            class="buttonStyle1"
+            >Select</a
+          >
+        </td>
+      </tr>
+
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="makeMiddle">
+    <a href="{% url 'finance:accounts' %}" class="btn btn-outline-danger"
+      >Cancel</a
+    >
+  </div>
+</div>
+
+{% endif %} {% endblock %}

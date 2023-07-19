@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block nav_block %} {% endblock %}
+{% block body_block %}
+
+<style>
+  /* .gridContainer{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+
+} */
+
+  .row {
+    min-height: 75vh;
+  }
+
+  .info {
+    text-align: center;
+  }
+
+  .proPic {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 10%;
+  }
+
+  .editDesign {
+    cursor: pointer;
+  }
+</style>
+
+{% if user.is_authenticated %}
+
+<div
+  class="gridContainer container"
+  style="margin-top: 30px; margin-bottom: 30px"
+>
+  <div class="row">
+    <div class="info col-lg-3 col-md-4 col-sm-12">
+      <img
+        src="/media/{{ myMoreInfo.proPic }}"
+        alt="Profile Pic"
+        class="proPic"
+      />
+
+      <h2>{{ myInfo.first_name }} {{ myInfo.last_name }}</h2>
+
+      <p>
+        {% if myMoreInfo.role == '1' %} ( Chief ) {% elif myMoreInfo.role == '2'
+        %} ( Moderator ) {% elif myMoreInfo.role == '3' %} ( Human Resource ) {%
+        elif myMoreInfo.role == '4' %} ( Accountant ) {% else %} ( Office
+        Employee ) {% endif %}
+
+        <a href="{% url 'dashboard:edit_profile' id=myInfo.id %}">
+          <img
+            src="{% static 'images/icons/edit.png' %}"
+            alt="edit"
+            width="15px"
+          />
+        </a>
+      </p>
+
+      <p>{{ myInfo.email }}</p>
+
+      <a href="tel:{{ myMoreInfo.phone }}"> {{ myMoreInfo.phone }} </a>
+
+      {% if noticeController %}
+
+      <a href="{% url 'dashboard:createNotice' %}" class="buttonStyle2"
+        >Add Notice</a
+      >
+
+      {% endif %}
+    </div>
+
+    <div class="notice col-lg-9 col-md-8 col-sm-12">
+      {% if notices %} {% for note in notices %}
+
+      <div class="notices">
+        {% if note.needToComplete %} {% if note.completedBy %}
+        <h1 style="color: #787878">{{ note.title }}</h1>
+        <p style="color: #787878">{{ note.details }}</p>
+        <h3 style="color: #787878">Dead line: {{ note.deadLine }}</h3>
+        {% else %}
+        <h1>{{ note.title }}</h1>
+        <p>{{ note.details }}</p>
+        <h5>
+          Dead line: {{ note.deadLine }} {% now "Y-m-d" as todays_date %} {% if
+          todays_date > note.deadLine|date:"Y-m-d" %}
+          <span style="color: red"> ( Dead Line is Over ) </span>
+          {% endif %}
+        </h5>
+
+        {% if noticeController %}
+
+        <h5 style="display: inline-block">for:</h5>
+
+        {% for user in note.user.all %}
+
+        <h6 style="display: inline-block">{{ user }},</h6>
+
+        {% endfor %} {% endif %} {% endif %} {% else %}
+
+        <h1>{{ note.title }}</h1>
+        <p>{{ note.details }}</p>
+
+        {% endif %}
+
+        <p>
+          {% if noticeController %}
+
+          <a
+            href="{% url 'dashboard:edit_notice' id=note.id %}"
+            class="buttonStyle1"
+          >
+            Edit
+          </a>
+          <a
+            href="{% url 'dashboard:delete_notice' id=note.id %}"
+            class="buttonStyle1"
+            onclick="return confirm('Are you sure?')"
+          >
+            Delete
+          </a>
+
+          {% endif %} {% if note.needToComplete %} {% if note.completedBy %}
+          <a
+            href="{% url 'dashboard:make_incomplete' id=note.id %}"
+            class="buttonStyle3"
+            onclick="return confirm('Are you sure?')"
+          >
+            Undo
+          </a>
+          <span> Completed By: {{ note.completedBy }} </span>
+          {% else %}
+
+          <a
+            href="{% url 'dashboard:make_complete' id=note.id %}"
+            class="buttonStyle1"
+            onclick="return confirm('Are you sure?')"
+          >
+            Complete
+          </a>
+          {% endif %} {% endif %}
+        </p>
+
+        <hr />
+      </div>
+
+      {% endfor %} {% else %}
+
+      <h1>No notice available</h1>
+
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endif %} {% endblock %}

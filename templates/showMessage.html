@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block head_block %} {% endblock
+%} {% block body_block %}
+
+<style>
+  .wrapper {
+    min-height: 80vh;
+    padding-top: 150px;
+  }
+
+  .margineTop100 {
+    margin-top: 150px;
+  }
+</style>
+
+<div class="container wrapper makeMiddle">
+  {% if user.is_authenticated %} {% if message %}
+
+  <h1 style="font-size: 3rem">{{ message }}</h1>
+
+  {% else %}
+
+  <h1 style="font-size: 3rem">Something went wrong</h1>
+
+  {% endif %} {% endif %}
+</div>
+
+{% endblock %}

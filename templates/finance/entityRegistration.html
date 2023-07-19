@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% block body_block %} {% if user.is_authenticated %}
+
+<style>
+  .formContainer {
+    min-height: 72.1vh;
+    width: 80%;
+  }
+</style>
+
+<div class="container">
+  <div class="mt-4">
+    {% if editText %}
+    <h1>{{ editText }}:</h1>
+    {% else %}
+    <h1>Register New Entity:</h1>
+    {% endif %}
+  </div>
+
+  <h5>{{ message }}</h5>
+
+  <div class="formContainer">
+    <form method="POST" enctype="multipart/form-data">
+      {% for field in entityForm %}
+
+      <p>
+        <label for="{{ field.auto_id }}">{{ field.label }}</label>
+        {{ field }}
+      </p>
+
+      {% endfor %} {% csrf_token %}
+
+      <div class="makeMiddle mt-4 mb-4">
+        {% if editText %}
+        <input type="submit" value="edit" />
+        {% else %}
+        <input type="submit" value="register" />
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endif %} {% endblock %}

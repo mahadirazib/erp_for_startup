@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block nav_block %} {% if
+finaceController %} {% endif %} {% endblock %} {% block body_block %} {% if
+user.is_authenticated %}
+
+<style>
+  .wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    min-height: 80vh;
+  }
+</style>
+
+<div class="container wrapper">
+  <a
+    href="{% url 'finance:create_monthly_salary' %}"
+    class="buttonStyle1"
+    style="padding: 5px 30px"
+    >Create This month's Salary Sheet</a
+  >
+
+  <h1 style="margin: 20px 0">Employee Salary list in details:</h1>
+
+  <div style="width: 100%; overflow-x: scroll">
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Salary</th>
+        <th>month</th>
+        <th>Status</th>
+      </tr>
+
+      {% for user in salaryAndUser %}
+
+      <tr>
+        <td>
+          {{ user.user.first_name }} {{ user.user.last_name }} {% if
+          user.user.userinfo.role == '1' %} ( Chief ) {% elif
+          user.user.userinfo.role == '2' %} ( Moderator ) {% elif
+          user.user.userinfo.role == '3' %} ( HR ) {% elif
+          user.user.userinfo.role == '4' %} ( Accountant ) {% else %} ( Office
+          Employee ) {% endif %}
+        </td>
+        <td>{{ user.monthlySalary }}</td>
+        <td>{{ user.month|date:"M Y" }}</td>
+        <td>
+          {% if user.paidStatus %} Paid {% else %} Unpaid
+          <a
+            href="{% url 'finance:make_employee_salary_paid' id=user.id %}"
+            class="buttonStyle1"
+            >Make Paid</a
+          >
+          {% endif %}
+        </td>
+      </tr>
+
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+{% endif %} {% endblock %}
